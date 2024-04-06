@@ -29,7 +29,7 @@ builder.Services.AddRazorPages();
 //});
 
 //builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-//builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<ITypeService, TypeService>();
 builder.Services.AddTransient<ILocationService, LocationService>();
 builder.Services.AddTransient<IInstrumentationService, InstrumentationService>();

@@ -28,6 +28,7 @@ namespace InstrumentationAccountingSystem2.Controllers
             _instrumentationService = instrumentationService;
             _verificationService = verificationService;
             _userManager = userManager;
+            _userService = userService;
         }
 
         [AllowAnonymous]
@@ -70,7 +71,7 @@ namespace InstrumentationAccountingSystem2.Controllers
                 }
             }
 
-            //sorting
+            //sorting instrumentations
             switch (HttpContext.Session.GetString("SortName"))
             {
                 case "Id":

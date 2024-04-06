@@ -9,11 +9,11 @@ namespace InstrumentationAccountingSystem2.BusinessLogic.Interfaces
 
         List<User> GetAll();
 
-        User Get(UserLogInDto userLogInDto);
+        //User Get(UserLogInDto userLogInDto);
 
-        User GetUserById(int id);
+        //User GetUserById(int id);
 
-        void DeleteUserById(int id);
+        //void DeleteUserById(int id);
 
         void Edit(User user);
     }
