@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using InstrumentationAccountingSystem2.Dto;
+using InstrumentationAccountingSystem2.Models;
 
 namespace InstrumentationAccountingSystem2.Mapper
 {
@@ -8,6 +9,7 @@ namespace InstrumentationAccountingSystem2.Mapper
         public MapperProfile()
         {
             CreateMap<UserCreateDto, User>();
+            CreateMap<UserLogInDto, User>();
             CreateMap<TypeCreateDto, Models.Type>();
             CreateMap<LocationCreateDto, Location>();
             CreateMap<InstrumentationCreateDto, Instrumentation>();

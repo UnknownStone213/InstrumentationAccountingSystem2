@@ -1,9 +1,11 @@
-﻿namespace InstrumentationAccountingSystem2.Dto
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace InstrumentationAccountingSystem2.Dto
 {
     public class UserCreateDto
     {
-        // 1111111111111111111111111
-        public string Login { get; set; }
-        public string Password { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Patronymic { get; set; }
     }
 }
