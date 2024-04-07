@@ -80,4 +80,22 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+using (var scope = app.Services.CreateScope())
+{
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+    string email = "admin@admin.com";
+    string password = "Game123_";
+    string fname = "V";
+    string lname = "H";
+    string patronymic = "A";
+    if (await userManager.FindByEmailAsync(email) == null)
+    {
+        User user = new User(fname, lname, patronymic);
+        user.Email = email;
+        user.UserName = email;
+        await userManager.CreateAsync(user, password);
+        await userManager.AddToRoleAsync(user, "Admin");
+    }
+}
+
 app.Run();

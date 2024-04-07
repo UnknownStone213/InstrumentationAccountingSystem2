@@ -6,6 +6,8 @@ namespace InstrumentationAccountingSystem2.Models
 {
     public class User : IdentityUser
     {
+        public User() { }
+        public User(string fname, string lname, string patronymic) { FirstName = fname; LastName = lname; Patronymic = patronymic; }
         [PersonalData]
         [Column(TypeName = "nvarchar(100)")]
         public string FirstName { get; set; }

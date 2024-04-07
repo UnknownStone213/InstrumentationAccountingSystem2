@@ -40,7 +40,7 @@ namespace InstrumentationAccountingSystem2.Controllers
             List<Instrumentation> list = new List<Instrumentation> ();
             foreach (var item in _instrumentationService.GetAll())
             {
-                if (instrums.Contains(item.Id.ToString()))
+                if (instrums?.Contains(item.Id.ToString()) ?? false)
                 {
                     list.Add(item);
                 }
@@ -116,7 +116,7 @@ namespace InstrumentationAccountingSystem2.Controllers
             verifications = _verificationService.GetAll();
             foreach (var item in _instrumentationService.GetAll())
             {
-                if ((typeId == null || item.TypeId == typeId) && ((model == null) || (item.Model != null && item.Model.Equals(model, StringComparison.OrdinalIgnoreCase))) && ((factoryNumber == null) || (item.FactoryNumber != null && item.FactoryNumber.Equals(factoryNumber, StringComparison.OrdinalIgnoreCase))) && ((locationName == null) || (locations.FirstOrDefault(u => u.Id == item.LocationId).Name.Contains(locationName, StringComparison.OrdinalIgnoreCase))) && ((checkMonth == null) || (checkMonth == "checkMonthTrue") && ((_verificationService.GetLastVerificationByInstrumentationId(item.Id)?.Date.ToDateTime(TimeOnly.MinValue).AddMonths(item.Frequency ?? 0) ?? DateTime.MinValue) < DateTime.Now.AddDays(30))))
+                if ((typeId == null || item.TypeId == typeId) && ((model == null) || (item.Model != null && item.Model.Equals(model, StringComparison.OrdinalIgnoreCase))) && ((factoryNumber == null) || (item.FactoryNumber != null && item.FactoryNumber.Equals(factoryNumber, StringComparison.OrdinalIgnoreCase))) && ((locationName == null) || (locations.FirstOrDefault(u => u.Id == item.LocationId)?.Name.Contains(locationName, StringComparison.OrdinalIgnoreCase) ?? false)) && ((checkMonth == null) || (checkMonth == "checkMonthTrue") && ((_verificationService.GetLastVerificationByInstrumentationId(item.Id)?.Date.ToDateTime(TimeOnly.MinValue).AddMonths(item.Frequency ?? 0) ?? DateTime.MinValue) < DateTime.Now.AddDays(30))))
                 {
                     instrumentations.Add(item);
                 }
