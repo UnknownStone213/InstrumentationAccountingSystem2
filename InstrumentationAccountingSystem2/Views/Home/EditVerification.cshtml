@@ -1,0 +1,50 @@
+﻿@using InstrumentationAccountingSystem2.BusinessLogic.Interfaces
+
+@model InstrumentationAccountingSystem2.Models.Verification
+
+@inject IInstrumentationService InstrumentationService
+
+@{
+    List<Instrumentation> instrumentations = new List<Instrumentation> { };
+    foreach (var item in @InstrumentationService.GetAll())
+    {
+        instrumentations.Add(item);
+    }
+}
+
+<h5>Изменить поверку СИ</h5>
+<form asp-action="EditVerification" asp-controller="home" asp-route-id="@Model">
+    <p hidden>
+        <label asp-for="Id">Id</label><br />
+        <input type="text" asp-for="Id" value="@Model.Id" />
+        <span asp-validation-for="Id"></span>
+    </p>
+    <p>
+        <label asp-for="Date">Дата поверки</label><br />
+        <input type="date" asp-for="Date" value="@Model.Date.ToString("yyyy-MM-dd")" />
+        <span asp-validation-for="Date"></span>
+    </p>
+    <p>
+        <label asp-for="InstrumentationId">СИ</label><br />
+        <select name="InstrumentationId" id="InstrumentationId">
+            @foreach (var item in instrumentations)
+            {
+                if (Model.InstrumentationId == item.Id)
+                {
+                    <option selected value="@item.Id">@item.Id. @item.Model</option>
+                }
+                else
+                {
+                    <option value="@item.Id">@item.Id. @item.Model</option>
+                }
+            }
+        </select>
+        <span asp-validation-for="@InstrumentationService"></span>
+    </p>
+    <p>
+        <input type="submit" value="Изменить" />
+    </p>
+</form>
+<form asp-controller="Home" asp-action="DeleteVerificationById" method="post" asp-route-id="@Model.Id">
+    <input type="submit" onclick="return confirm('Вы уверены, что хотите удалить эту поверку?');" value="Удалить поверку" style="color:red" />
+</form>

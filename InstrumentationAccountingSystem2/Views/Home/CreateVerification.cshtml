@@ -1,0 +1,66 @@
+﻿@using InstrumentationAccountingSystem2.BusinessLogic.Interfaces
+
+@model InstrumentationAccountingSystem2.Models.Verification
+
+@inject IVerificationService VerificationService
+@inject IInstrumentationService InstrumentationService
+
+@{
+    List<Verification> verifications = new List<Verification> { };
+    foreach (var item in @VerificationService.GetAll())
+    {
+        verifications.Add(item);
+    }
+    List<Instrumentation> instrumentations = new List<Instrumentation> { };
+    foreach (var item in @InstrumentationService.GetAll())
+    {
+        instrumentations.Add(item);
+    }
+}
+
+<h5>Добавить поверку СИ</h5>
+<form asp-action="CreateVerification" asp-controller="home">
+    <p>
+        <label asp-for="Date">Дата поверки</label><br />
+        <input type="date" asp-for="Date" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+        <span asp-validation-for="Date"></span>
+    </p>
+    <p>
+        <label asp-for="InstrumentationId">СИ</label><br />
+        <select name="InstrumentationId" id="InstrumentationId">
+            @foreach (var item in instrumentations)
+            {
+                if (ViewData["InstrumentationId"] != null && (int)ViewData["InstrumentationId"] == item.Id)
+                {
+                    <option selected value="@item.Id">@item.Id. @item.Model</option>
+                }
+                else
+                {
+                    <option value="@item.Id">@item.Id. @item.Model</option>
+                }
+            }
+        </select>
+        <span asp-validation-for="@VerificationService"></span>
+    </p>
+    <p>
+        <input type="submit" value="Добавить" />
+    </p>
+</form>
+
+<table class="table">
+    <tr><th>Id</th><th>Дата</th><th>СИ</th></tr>
+    @foreach (var item in verifications)
+    {
+        if (ViewData["InstrumentationId"] != null && (int)ViewData["InstrumentationId"] == item.InstrumentationId)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Date</td>
+                <td>@instrumentations.FirstOrDefault(u => u.Id == item.InstrumentationId).Id. @instrumentations.FirstOrDefault(u => u.Id == item.InstrumentationId).Model</td>
+                <td>
+                    <a asp-action="EditVerification" asp-controller="Home" asp-route-id="@item.Id">Изменить</a>
+                </td>
+            </tr>
+        }
+    }
+</table>

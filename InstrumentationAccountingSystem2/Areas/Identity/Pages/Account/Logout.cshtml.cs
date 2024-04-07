@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using InstrumentationAccountingSystem2.Models;
 
-namespace InstrumentationAccountingSystem.Areas.Identity.Pages.Account
+namespace InstrumentationAccountingSystem2.Areas.Identity.Pages.Account
 {
     public class LogoutModel : PageModel
     {

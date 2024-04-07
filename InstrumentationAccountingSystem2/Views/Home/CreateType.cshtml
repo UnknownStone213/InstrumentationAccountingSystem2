@@ -1,0 +1,39 @@
+﻿@using InstrumentationAccountingSystem2.BusinessLogic.Interfaces
+
+@model InstrumentationAccountingSystem2.Models.Type
+
+@inject ITypeService TypeService
+
+@{
+    List<InstrumentationAccountingSystem2.Models.Type> types = new List<InstrumentationAccountingSystem2.Models.Type> { };
+    foreach (var item in @TypeService.GetAll())
+    {
+        types.Add(item);
+    }
+}
+
+<h5>Добавить тип СИ</h5>
+<form asp-action="CreateType" asp-controller="home">
+    <p>
+        <label asp-for="Name">Название типа</label><br />
+        <input type="text" asp-for="Name" />
+        <span asp-validation-for="Name"></span>
+    </p>
+    <p>
+        <input type="submit" value="Добавить" />
+    </p>
+</form>
+
+<table class="table">
+    <tr><th>Id</th><th>Тип</th></tr>
+    @foreach (var item in types)
+    {
+        <tr>
+            <td>@item.Id</td>
+            <td>@item.Name</td>
+            <td>
+                <a asp-action="EditType" asp-controller="Home" asp-route-id="@item.Id">Изменить</a>
+            </td>
+        </tr>
+    }
+</table>
