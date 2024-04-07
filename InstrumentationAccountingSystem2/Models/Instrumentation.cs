@@ -6,9 +6,8 @@ namespace InstrumentationAccountingSystem2.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required]
-        public int TypeId { get; set; } // тип
-        public Type Type { get; set; }
+        public int? TypeId { get; set; } // тип
+        public Type? Type { get; set; }
         [StringLength(100)]
         public string? Model { get; set; } // модель
         [StringLength(100)]

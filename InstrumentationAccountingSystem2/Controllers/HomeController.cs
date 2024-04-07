@@ -1,9 +1,11 @@
+using ClosedXML.Excel;
 using InstrumentationAccountingSystem2.BusinessLogic.Interfaces;
 using InstrumentationAccountingSystem2.Dto;
 using InstrumentationAccountingSystem2.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Diagnostics;
 
 namespace InstrumentationAccountingSystem2.Controllers
@@ -29,6 +31,55 @@ namespace InstrumentationAccountingSystem2.Controllers
             _verificationService = verificationService;
             _userManager = userManager;
             _userService = userService;
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> GetExcel(string? instrums)
+        {
+            List<Instrumentation> list = new List<Instrumentation> ();
+            foreach (var item in _instrumentationService.GetAll())
+            {
+                if (instrums.Contains(item.Id.ToString()))
+                {
+                    list.Add(item);
+                }
+            }
+            DataTable dt = new DataTable();
+            dt.Clear();
+            dt.Columns.Add("Id");
+            dt.Columns.Add("Тип");
+            dt.Columns.Add("Модель");
+            dt.Columns.Add("Заводской номер");
+            dt.Columns.Add("Место установки");
+            dt.Columns.Add("Пределы измерений");
+            dt.Columns.Add("Периодичность измерений");
+            dt.Columns.Add("Присоединение к процессу");
+            dt.Columns.Add("Примечание");
+            foreach (var item in list)
+            {
+                DataRow row = dt.NewRow();
+                row["Id"] = item.Id;
+                row["Тип"] = item.Type?.Name ?? "";
+                row["Модель"] = item.Model;
+                row["Заводской номер"] = item.FactoryNumber;
+                row["Место установки"] = item.Location?.Name ?? "";
+                row["Пределы измерений"] = item.MeasurementLimits;
+                row["Периодичность измерений"] = item.Frequency;
+                row["Присоединение к процессу"] = item.Connection;
+                row["Примечание"] = item.Comment;
+                dt.Rows.Add(row);
+            }
+            using (XLWorkbook ewb = new XLWorkbook())
+            {
+                ewb.Worksheets.Add(dt, "Средства измерения");
+                using ( MemoryStream stream = new MemoryStream()) 
+                {
+                    ewb.SaveAs(stream);
+                    
+                    return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Средства измерения.xlsx");
+                }
+            }
         }
 
         [AllowAnonymous]

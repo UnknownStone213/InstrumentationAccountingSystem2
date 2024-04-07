@@ -9,5 +9,6 @@ namespace InstrumentationAccountingSystem2.Models
         [Required]
         [StringLength(100)]
         public string Name { get; set; }
+        public ICollection<Instrumentation> Instrumentations { get; } = new List<Instrumentation>();
     }
 }

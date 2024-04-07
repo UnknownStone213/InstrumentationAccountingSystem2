@@ -25,7 +25,6 @@
             }
         }
     }
-
     Dictionary<int, bool> check2Dates = new Dictionary<int, bool> { };
     foreach (var item in Model.Instrumentations)
     {
@@ -81,6 +80,10 @@
 <form method="get" class="container-fluid">
     <input type="submit" value="Отменить фильтрацию" />
 </form>
+<form method="get" asp-action="GetExcel" class="container-fluid">
+    <input hidden type="text" name="instrums" value="@string.Join(" ", Model.Instrumentations.Select(u => u.Id))" />
+    <input type="submit" value="Скачать Excel" />
+</form>
 
 <h4 style="clear:left; padding-top:20px;">Средства измерений(@Model.Instrumentations.Count):</h4>
 <table class="table table-hover table-sm" >
@@ -111,7 +114,7 @@
             <td>@Model.Verifications.FirstOrDefault(u => u.InstrumentationId == item.Id)?.Date.AddMonths(item.Frequency ?? 0) 
                 @if (@Model.Verifications.FirstOrDefault(u => u.InstrumentationId == item.Id) == null)
                 {
-                    <p>!!!!!</p>
+                    <p></p>
                 }
                 else
                 {
