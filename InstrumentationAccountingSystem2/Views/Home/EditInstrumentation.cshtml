@@ -33,6 +33,7 @@
     <p>
         <label asp-for="TypeId">Тип СИ</label><br />
         <select name="TypeId" id="TypeId">
+            <option value=""></option>
             @foreach (var item in types)
             {
                 <option value="@item.Id" >@item.Id. @item.Name</option>

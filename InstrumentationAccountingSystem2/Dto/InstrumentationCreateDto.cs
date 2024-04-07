@@ -2,7 +2,7 @@
 {
     public class InstrumentationCreateDto
     {
-        public int TypeId { get; set; } // тип
+        public int? TypeId { get; set; } // тип
         public string? Model { get; set; } // модель
         public string? FactoryNumber { get; set; } // заводской номер
         public int? LocationId { get; set; } // место установки

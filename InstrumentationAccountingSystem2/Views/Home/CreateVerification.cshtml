@@ -32,7 +32,7 @@
             {
                 if (ViewData["InstrumentationId"] != null && (int)ViewData["InstrumentationId"] == item.Id)
                 {
-                    <option selected value="@item.Id">@item.Id. @item.Model</option>
+                    <option selected value="@item.Id">@item.Id. @item.Model @item.FactoryNumber</option>
                 }
                 else
                 {

@@ -25,6 +25,12 @@ namespace InstrumentationAccountingSystem2.Models
                 .HasForeignKey(i => i.LocationId)
                 .OnDelete(DeleteBehavior.SetNull)
                 .IsRequired(false);
+            modelBuilder.Entity<Type>()
+                .HasMany(i => i.Instrumentations)
+                .WithOne(i => i.Type)
+                .HasForeignKey(i => i.TypeId)
+                .OnDelete(DeleteBehavior.SetNull)
+                .IsRequired(false);
         }
     }
 }
