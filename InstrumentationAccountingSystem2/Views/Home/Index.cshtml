@@ -1,6 +1,7 @@
 ﻿@model InstrumentationAccountingSystem2.Models.HomeModel
 
-@{
+@{ 
+    // red and yellow colored rows using CSS class
     Dictionary<int, bool> checkDates = new Dictionary<int, bool> { };
     foreach (var item in Model.Instrumentations)
     {

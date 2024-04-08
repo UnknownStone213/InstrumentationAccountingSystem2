@@ -116,7 +116,12 @@ namespace InstrumentationAccountingSystem2.Controllers
             verifications = _verificationService.GetAll();
             foreach (var item in _instrumentationService.GetAll())
             {
-                if ((typeId == null || item.TypeId == typeId) && ((model == null) || (item.Model != null && item.Model.Equals(model, StringComparison.OrdinalIgnoreCase))) && ((factoryNumber == null) || (item.FactoryNumber != null && item.FactoryNumber.Equals(factoryNumber, StringComparison.OrdinalIgnoreCase))) && ((locationName == null) || (locations.FirstOrDefault(u => u.Id == item.LocationId)?.Name.Contains(locationName, StringComparison.OrdinalIgnoreCase) ?? false)) && ((checkMonth == null) || (checkMonth == "checkMonthTrue") && ((_verificationService.GetLastVerificationByInstrumentationId(item.Id)?.Date.ToDateTime(TimeOnly.MinValue).AddMonths(item.Frequency ?? 0) ?? DateTime.MinValue) < DateTime.Now.AddDays(30))))
+                if ((typeId == null || item.TypeId == typeId) 
+                    && ((model == null) || (item.Model != null && item.Model.Equals(model, StringComparison.OrdinalIgnoreCase)))
+                    && ((factoryNumber == null) || (item.FactoryNumber != null && item.FactoryNumber.Equals(factoryNumber, StringComparison.OrdinalIgnoreCase)))
+                    && ((locationName == null) || (locations.FirstOrDefault(u => u.Id == item.LocationId)?.Name.Contains(locationName, StringComparison.OrdinalIgnoreCase) ?? false))
+                    && ((checkMonth == null) || (checkMonth == "checkMonthTrue") 
+                    && ((_verificationService.GetLastVerificationByInstrumentationId(item.Id)?.Date.ToDateTime(TimeOnly.MinValue).AddMonths(item.Frequency ?? 0) ?? DateTime.MinValue) < DateTime.Now.AddDays(30))))
                 {
                     instrumentations.Add(item);
                 }
@@ -342,8 +347,12 @@ namespace InstrumentationAccountingSystem2.Controllers
         [HttpPost]
         public ActionResult EditInstrumentation(Instrumentation instrumentation)
         {
-            _instrumentationService.Edit(instrumentation);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                _instrumentationService.Edit(instrumentation);
+                return RedirectToAction("Index");
+            }
+            return View(instrumentation);
         }
 
         [HttpPost]
@@ -367,7 +376,6 @@ namespace InstrumentationAccountingSystem2.Controllers
             if (ModelState.IsValid)
             {
                 _verificationService.Create(verificationCreateDto);
-
                 return RedirectToAction("CreateVerification");
             }
             return View(verificationCreateDto);
@@ -377,15 +385,18 @@ namespace InstrumentationAccountingSystem2.Controllers
         public ActionResult EditVerification(int id)
         {
             Verification? verification = _verificationService.GetVerificationById(id);
-
             return View(verification);
         }
         [HttpPost]
         public ActionResult EditVerification(Verification verification)
         {
-            _verificationService.EditVerification(verification);
-            //return RedirectToAction("EditInstrumentation", verification.InstrumentationId);
-            return RedirectToAction("Index");
+            if (ModelState.IsValid)
+            {
+                _verificationService.EditVerification(verification);
+                //return RedirectToAction("EditInstrumentation", verification.InstrumentationId);
+                return RedirectToAction("Index");
+            }
+            return View(verification);
         }
 
         public ActionResult DeleteVerificationById(int id)
@@ -423,8 +434,12 @@ namespace InstrumentationAccountingSystem2.Controllers
         [HttpPost]
         public ActionResult EditType(Models.Type type)
         {
-            _typeService.EditType(type);
-            return RedirectToAction("CreateType");
+            if (ModelState.IsValid)
+            {
+                _typeService.EditType(type);
+                return RedirectToAction("CreateType");
+            }
+            return View(type);
         }
 
         [HttpPost]
@@ -462,8 +477,12 @@ namespace InstrumentationAccountingSystem2.Controllers
         [HttpPost]
         public ActionResult EditLocation(Location location)
         {
-            _locationService.EditLocation(location);
-            return RedirectToAction("CreateLocation");
+            if (ModelState.IsValid)
+            {
+                _locationService.EditLocation(location);
+                return RedirectToAction("CreateLocation");
+            }
+            return View(location);
         }
 
         [HttpPost]
