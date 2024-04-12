@@ -1,7 +1,8 @@
 ﻿@model InstrumentationAccountingSystem2.Models.HomeModel
 
-@{ 
+@{
     // red and yellow colored rows using CSS class
+    Model.Verifications.OrderByDescending(u => u.Date);
     Dictionary<int, bool> checkDates = new Dictionary<int, bool> { };
     foreach (var item in Model.Instrumentations)
     {
@@ -52,81 +53,104 @@
     }
 }
 
-<div>
-    <a asp-action="CreateInstrumentation"><button>Добавить СИ</button></a>
-    <a asp-action="CreateType"><button>Добавить тип СИ</button></a>
-    <a asp-action="CreateLocation"><button>Добавить место установки</button></a>
-    <a asp-action="CreateVerification"><button>Добавить поверку СИ</button></a>
+<div class="btn-group" role="group">
+    <a class="btn btn-secondary" asp-action="CreateInstrumentation">Добавить СИ</a>
+    <a class="btn btn-secondary" asp-action="CreateType">Добавить тип СИ</a>
+    <a class="btn btn-secondary" asp-action="CreateLocation">Добавить место установки</a>
+    <a class="btn btn-secondary" asp-action="CreateVerification">Добавить поверку СИ</a>
 </div>
-<form method="get" class="container-fluid">
-    <label>Тип СИ:</label>
-    <select name="TypeId" id="TypeId">
-        <option value=""></option>
-        @foreach (var item in Model.Types)
-        {
-            <option value="@item.Id">@item.Id. @item.Name</option>
-        }
-    </select>
-    <label>Модель:</label>
-    <input type="text" name="Model" maxlength="50" size="20" value="@ViewData["Model"]" />
-    <label>Заводской номер:</label>
-    <input type="text" name="FactoryNumber" maxlength="50" size="10" value="@ViewData["FactoryNumber"]" />
-    <label>Место установки:</label>
-    <input type="text" name="LocationName" maxlength="50" size="30" value="@ViewData["LocationName"]" />
-    <label>30 дней:</label>
-    <input type="checkbox" name="checkMonth" value="checkMonthTrue" checked="@ViewData["checkMonth"]" />
-    <br />
-    <input type="submit" value="Фильтрация" style="display:inline;" />
-</form>
-<form method="get" class="container-fluid">
-    <input type="submit" value="Отменить фильтрацию" />
-</form>
-<form method="get" asp-action="GetExcel" class="container-fluid">
-    <input hidden type="text" name="instrums" value="@string.Join(" ", Model.Instrumentations.Select(u => u.Id))" />
-    <input type="submit" value="Скачать Excel" />
-</form>
-
-<h4 style="clear:left; padding-top:20px;">Средства измерений(@Model.Instrumentations.Count):</h4>
-<table class="table table-hover table-sm" >
-    <tr>
-        <th onclick="location.href = '@Url.Action("Index", "Home", new { sortName = "Id" })';">Id</th>
-        <th onclick="location.href = '@Url.Action("Index", "Home", new { sortName = "Тип" })';">Тип</th>
-        <th onclick="location.href = '@Url.Action("Index", "Home", new { sortName = "Модель" })';">Модель</th>
-        <th onclick="location.href = '@Url.Action("Index", "Home", new { sortName = "Заводской номер" })';">Заводской номер</th>
-        <th onclick="location.href = '@Url.Action("Index", "Home", new { sortName = "Место установки" })';">Место установки</th>
-        <th onclick="location.href = '@Url.Action("Index", "Home", new { sortName = "Пределы измерений" })';">Пределы измерений</th>
-        <th onclick="location.href = '@Url.Action("Index", "Home", new { sortName = "Дата последней поверки" })';">Дата последней поверки</th>
-        <th onclick="location.href = '@Url.Action("Index", "Home", new { sortName = "Периодичность измерений" })';">Периодичность измерений</th>
-        <th onclick="location.href = '@Url.Action("Index", "Home", new { sortName = "Дата очередной поверки" })';">Дата очередной поверки</th>
-        <th onclick="location.href = '@Url.Action("Index", "Home", new { sortName = "Присоединение к процессу" })';">Присоединение к процессу</th>
-        <th onclick="location.href = '@Url.Action("Index", "Home", new { sortName = "Примечание" })';">Примечание</th>
-    </tr>
-    @foreach (var item in Model.Instrumentations)
-    {
-        <tr class="@string.Concat("check", checkDates[item.Id].ToString()) @string.Concat("check2", check2Dates[item.Id].ToString())" onclick="location.href = '@Url.Action("EditInstrumentation", "Home", item)';" style="word-wrap:normal">
-            <td>@item.Id</td>
-            <td>@Model.Types.FirstOrDefault(u => u.Id == item.TypeId)?.Id @Model.Types.FirstOrDefault(u => u.Id == item.TypeId)?.Name</td>
-            <td>@item.Model</td>
-            <td>@item.FactoryNumber</td>
-            <td>@Model.Locations.FirstOrDefault(u => u.Id == item.LocationId)?.Name</td>
-            <td>@item.MeasurementLimits</td>
-            <td>@Model.Verifications.FirstOrDefault(u => u.InstrumentationId == item.Id)?.Date</td>
-            <td>@item.Frequency</td>
-            <td>@Model.Verifications.FirstOrDefault(u => u.InstrumentationId == item.Id)?.Date.AddMonths(item.Frequency ?? 0) 
-                @if (@Model.Verifications.FirstOrDefault(u => u.InstrumentationId == item.Id) == null)
+<div class="d-flex">
+    <form method="get">
+        <div>
+            <label>Тип СИ:</label>
+            <select name="TypeId" id="TypeId">
+                <option value=""></option>
+                @foreach (var item in Model.Types)
                 {
-                    <p></p>
+                    <option value="@item.Id">@item.Id. @item.Name</option>
                 }
-                else
-                {
-                    DateTime sp = DateTime.Parse(Model.Verifications.FirstOrDefault(u => u.InstrumentationId == item.Id)?.Date.AddMonths(item.Frequency ?? 0).ToString());
-                    <p>(@sp.Subtract(DateTime.Now.Date).Days дней)</p>
-                }</td>
-            <td>@item.Connection</td>
-            <td>@item.Comment</td>
+            </select>
+        </div>
+        <div>
+            <label>Модель:</label>
+            <input type="text" name="Model" maxlength="50" size="20" value="@ViewData["Model"]" />
+        </div>
+        <div>
+            <label>Заводской номер:</label>
+            <input type="text" name="FactoryNumber" maxlength="50" size="10" value="@ViewData["FactoryNumber"]" />
+        </div>
+        <div>
+            <label>Место установки:</label>
+            <input type="text" name="LocationName" maxlength="50" size="20" value="@ViewData["LocationName"]" />
+        </div>
+        <div>
+            <label>30 дней:</label>
+            <input type="checkbox" name="checkMonth" value="checkMonthTrue" checked="@ViewData["checkMonth"]" />
+        </div>
+        <div>
+            <input type="submit" value="Фильтрация" />
+        </div>
+    </form>
+</div>
+<div>
+    <form method="get" >
+        <input type="submit" value="Отменить фильтрацию" />
+    </form>
+</div>
+<div>
+    <form method="get" asp-action="GetExcel" >
+        <input hidden type="text" name="instrums" value="@string.Join(" ", Model.Instrumentations.Select(u => u.Id))" />
+        <input type="submit" value="Скачать Excel" />
+    </form>
+</div>
+<div class="pt-2">
+    <h4>Средства измерений(@Model.Instrumentations.Count):</h4>
+</div>
+<div class="table-responsive">
+    <table class="table table-hover">
+        <tr>
+            <th onclick="location.href = '@Url.Action("Index", "Home", new { sortName = "Id" })';">Id</th>
+            <th onclick="location.href = '@Url.Action("Index", "Home", new { sortName = "Тип" })';">Тип</th>
+            <th onclick="location.href = '@Url.Action("Index", "Home", new { sortName = "Модель" })';">Модель</th>
+            <th onclick="location.href = '@Url.Action("Index", "Home", new { sortName = "Заводской номер" })';">Заводской номер</th>
+            <th onclick="location.href = '@Url.Action("Index", "Home", new { sortName = "Место установки" })';">Место установки</th>
+            <th onclick="location.href = '@Url.Action("Index", "Home", new { sortName = "Пределы измерений" })';">Пределы измерений</th>
+            <th onclick="location.href = '@Url.Action("Index", "Home", new { sortName = "Дата последней поверки" })';">Дата последней поверки</th>
+            <th onclick="location.href = '@Url.Action("Index", "Home", new { sortName = "Периодичность измерений" })';">Периодичность измерений</th>
+            <th onclick="location.href = '@Url.Action("Index", "Home", new { sortName = "Дата очередной поверки" })';">Дата очередной поверки</th>
+            <th onclick="location.href = '@Url.Action("Index", "Home", new { sortName = "Присоединение к процессу" })';">Присоединение к процессу</th>
+            <th onclick="location.href = '@Url.Action("Index", "Home", new { sortName = "Примечание" })';">Примечание</th>
         </tr>
-    }
-</table>
+        @foreach (var item in Model.Instrumentations)
+        {
+            <tr class="@string.Concat("check", checkDates[item.Id].ToString()) @string.Concat("check2", check2Dates[item.Id].ToString())" onclick="location.href = '@Url.Action("EditInstrumentation", "Home", item)';" style="word-wrap:normal">
+                <td>@item.Id</td>
+                <td>@Model.Types.FirstOrDefault(u => u.Id == item.TypeId)?.Id @Model.Types.FirstOrDefault(u => u.Id == item.TypeId)?.Name</td>
+                <td>@item.Model</td>
+                <td>@item.FactoryNumber</td>
+                <td>@Model.Locations.FirstOrDefault(u => u.Id == item.LocationId)?.Name</td>
+                <td>@item.MeasurementLimits</td>
+                <td>@Model.Verifications.FirstOrDefault(u => u.InstrumentationId == item.Id)?.Date</td>
+                <td>@item.Frequency</td>
+                <td>
+                    @Model.Verifications.FirstOrDefault(u => u.InstrumentationId == item.Id)?.Date.AddMonths(item.Frequency ?? 0)
+                    @if (@Model.Verifications.FirstOrDefault(u => u.InstrumentationId == item.Id) == null)
+                    {
+                        <p></p>
+                    }
+                    else
+                    {
+                        Model.Verifications.OrderByDescending(u => u.Date);
+                        DateTime sp = DateTime.Parse(Model.Verifications.FirstOrDefault(u => u.InstrumentationId == item.Id)?.Date.AddMonths(item.Frequency ?? 0).ToString());
+                        <p>(@sp.Subtract(DateTime.Now.Date).Days дней)</p>
+                    }
+                </td>
+                <td>@item.Connection</td>
+                <td>@item.Comment</td>
+            </tr>
+        }
+    </table>
+</div>
 
 <style>
     tr.check2True {
@@ -135,10 +159,6 @@
 
     tr.checkTrue {
         background-color: red;
-    }
-
-    a {
-        text-decoration: none;
     }
 
     .tableHead {

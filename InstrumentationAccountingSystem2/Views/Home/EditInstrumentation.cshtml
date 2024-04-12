@@ -23,101 +23,100 @@
     }
 }
 
-<h5>Изменить СИ</h5>
-<form asp-action="EditInstrumentation" asp-controller="home" asp-route-id="@Model" style="display:flex; flex-wrap:wrap; justify-content:space-between">
-    <p hidden>
-        <label asp-for="Id">Id</label><br />
-        <input type="text" asp-for="Id" value="@Model.Id" />
-        <span asp-validation-for="Id"></span>
-    </p>
-    <p>
-        <label asp-for="TypeId">Тип СИ</label><br />
-        <select name="TypeId" id="TypeId">
-            <option value=""></option>
-            @foreach (var item in types)
-            {
-                <option value="@item.Id" >@item.Id. @item.Name</option>
-            }
-        </select>
-        <span asp-validation-for="@TypeService"></span>
-    </p>
-    <p>
-        <label asp-for="Model">Модель</label><br />
-        <input type="text" asp-for="Model" value="@Model.Model" />
-        <span asp-validation-for="Model"></span>
-    </p>
-    <p>
-        <label asp-for="FactoryNumber">Заводской номер</label><br />
-        <input type="text" asp-for="FactoryNumber" value="@Model.FactoryNumber" />
-        <span asp-validation-for="FactoryNumber"></span>
-    </p>
-    <p>
-        <label asp-for="LocationId">Место установки</label><br />
-        <select name="LocationId" id="LocationId">
-            @foreach (var item in locations)
-            {
-                <option value="@item.Id">@item.Id. @item.Name</option>
-            }
-        </select>
-        <span asp-validation-for="@LocationService"></span>
-    </p>
-    <p>
-        <label asp-for="MeasurementLimits">Пределы измерений</label><br />
-        <input type="text" asp-for="MeasurementLimits" value="@Model.MeasurementLimits" />
-        <span asp-validation-for="MeasurementLimits"></span>
-    </p>
-    <p>
-        <label asp-for="Frequency">Периодичность измерений</label><br />
-        <input type="text" asp-for="Frequency" value="@Model.Frequency" />
-        <span asp-validation-for="Frequency"></span>
-    </p>
-    <p>
-        <label asp-for="Connection">Присоединение к процессу</label><br />
-        <input type="text" asp-for="Connection" value="@Model.Connection" />
-        <span asp-validation-for="Connection"></span>
-    </p>
-    <p>
-        <label asp-for="Comment">Примечание</label><br />
-        <textarea type="text" asp-for="Comment" value="@Model.Comment" maxlength="250" rows="4" cols="70" ></textarea>
-        <span asp-validation-for="Comment"></span>
-    </p>
-    <p style="flex-basis:100%">
-        <input type="submit" value="Изменить" />
-    </p>
-</form>
-<form asp-controller="Home" asp-action="DeleteInstrumentationById" method="post" asp-route-id="@Model.Id">
-    <input type="submit" onclick="return confirm('Вы уверены, что хотите удалить это СИ?');" value="Удалить прибор" style="color:red" />
-</form>
-
-<h5 style="display:flex">
-    Поверки:
+<div style="font-size:large">Изменить СИ</div>
+<div>
+    <form asp-action="EditInstrumentation" asp-controller="home" asp-route-id="@Model" style="display:flex; flex-wrap:wrap; justify-content:space-between">
+        <div hidden>
+            <label asp-for="Id">Id</label><br />
+            <input type="text" asp-for="Id" value="@Model.Id" />
+            <span asp-validation-for="Id"></span>
+        </div>
+        <div>
+            <label asp-for="TypeId">Тип СИ</label><br />
+            <select name="TypeId" id="TypeId">
+                <option value=""></option>
+                @foreach (var item in types)
+                {
+                    <option value="@item.Id">@item.Id. @item.Name</option>
+                }
+            </select>
+            <span asp-validation-for="@TypeService"></span>
+        </div>
+        <div>
+            <label asp-for="Model">Модель</label><br />
+            <input type="text" asp-for="Model" value="@Model.Model" />
+            <span asp-validation-for="Model"></span>
+        </div>
+        <div>
+            <label asp-for="FactoryNumber">Заводской номер</label><br />
+            <input type="text" asp-for="FactoryNumber" value="@Model.FactoryNumber" />
+            <span asp-validation-for="FactoryNumber"></span>
+        </div>
+        <div>
+            <label asp-for="LocationId">Место установки</label><br />
+            <select name="LocationId" id="LocationId">
+                @foreach (var item in locations)
+                {
+                    <option value="@item.Id">@item.Id. @item.Name</option>
+                }
+            </select>
+            <span asp-validation-for="@LocationService"></span>
+        </div>
+        <div>
+            <label asp-for="MeasurementLimits">Пределы измерений</label><br />
+            <input type="text" asp-for="MeasurementLimits" value="@Model.MeasurementLimits" />
+            <span asp-validation-for="MeasurementLimits"></span>
+        </div>
+        <div>
+            <label asp-for="Frequency">Периодичность измерений</label><br />
+            <input type="text" asp-for="Frequency" value="@Model.Frequency" />
+            <span asp-validation-for="Frequency"></span>
+        </div>
+        <div>
+            <label asp-for="Connection">Присоединение к процессу</label><br />
+            <input type="text" asp-for="Connection" value="@Model.Connection" />
+            <span asp-validation-for="Connection"></span>
+        </div>
+        <div>
+            <label asp-for="Comment">Примечание</label><br />
+            <textarea type="text" asp-for="Comment" value="@Model.Comment" maxlength="250" rows="4" cols="40"></textarea>
+            <span asp-validation-for="Comment"></span>
+        </div>
+        <div class="w-100">
+            <input type="submit" value="Изменить" />
+        </div>
+    </form>
+</div>
+<div class="pt-3 pb-3">
+    <form asp-controller="Home" asp-action="DeleteInstrumentationById" method="post" asp-route-id="@Model.Id">
+        <input type="submit" onclick="return confirm('Вы уверены, что хотите удалить это СИ?');" value="Удалить прибор" style="color:red" />
+    </form>
+</div>
+<div class="d-flex">
+    <h4>Поверки:</h4>
     <form asp-controller="Home" asp-action="CreateVerification" method="get">
         <input hidden type="text" name="InstrumentationId" asp-for="@Model.Id" value="@Model.Id" />
-        <input type="submit" value="Добавить поверку данного прибора" />
+        <input type="submit" value="Добавить поверку" />
     </form>
-</h5>
-<table class="table">
-    <tr><th>Id</th><th>Дата поверки</th></tr>
-    @{
-        verifications = verifications.OrderByDescending(u => u.Date).ToList();
-    }
-    @foreach (var item in verifications)
-    {
-        if (item.InstrumentationId == Model.Id)
-        {
-            <tr>
-                <td>@item.Id</td>
-                <td>@item.Date</td>
-                <td>
-                    <a asp-action="EditVerification" asp-controller="Home" asp-route-id="@item.Id">Изменить</a>
-                </td>
-            </tr>
+</div>
+<div>
+    <table class="table">
+        <tr><th>Id</th><th>Дата поверки</th></tr>
+        @{
+            verifications = verifications.OrderByDescending(u => u.Date).ToList();
         }
-    }
-</table>
-
-<style type="text/css">
-    input{
-        display: inline;
-    }
-</style>
+        @foreach (var item in verifications)
+        {
+            if (item.InstrumentationId == Model.Id)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Date</td>
+                    <td>
+                        <a asp-action="EditVerification" asp-controller="Home" asp-route-id="@item.Id">Изменить</a>
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+</div>

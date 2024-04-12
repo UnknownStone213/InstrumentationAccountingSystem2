@@ -12,28 +12,31 @@
     }
 }
 
-<h5>Добавить место установки</h5>
-<form asp-action="CreateLocation" asp-controller="home">
-    <p>
-        <label asp-for="Name">Место установки</label><br />
-        <input type="text" asp-for="Name" />
-        <span asp-validation-for="Name"></span>
-    </p>
-    <p>
-        <input type="submit" value="Добавить" />
-    </p>
-</form>
-
-<table class="table">
-    <tr><th>Id</th><th>Место</th></tr>
-    @foreach (var item in locations)
-    {
-        <tr>
-            <td>@item.Id</td>
-            <td>@item.Name</td>
-            <td>
-                <a asp-action="EditLocation" asp-controller="Home" asp-route-id="@item.Id">Изменить</a>
-            </td>
-        </tr>
-    }
-</table>
+<div>
+    <h5>Добавить место установки</h5>
+    <form asp-action="CreateLocation" asp-controller="home">
+        <div>
+            <label asp-for="Name">Место установки</label><br />
+            <input type="text" asp-for="Name" />
+            <span asp-validation-for="Name"></span>
+        </div>
+        <div>
+            <input type="submit" value="Добавить" />
+        </div>
+    </form>
+</div>
+<div>
+    <table class="table">
+        <tr><th>Id</th><th>Место</th></tr>
+        @foreach (var item in locations)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.Name</td>
+                <td>
+                    <a asp-action="EditLocation" asp-controller="Home" asp-route-id="@item.Id">Изменить</a>
+                </td>
+            </tr>
+        }
+    </table>
+</div>

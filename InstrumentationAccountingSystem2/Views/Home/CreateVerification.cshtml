@@ -18,49 +18,52 @@
     }
 }
 
-<h5>Добавить поверку СИ</h5>
-<form asp-action="CreateVerification" asp-controller="home">
-    <p>
-        <label asp-for="Date">Дата поверки</label><br />
-        <input type="date" asp-for="Date" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
-        <span asp-validation-for="Date"></span>
-    </p>
-    <p>
-        <label asp-for="InstrumentationId">СИ</label><br />
-        <select name="InstrumentationId" id="InstrumentationId">
-            @foreach (var item in instrumentations)
-            {
-                if (ViewData["InstrumentationId"] != null && (int)ViewData["InstrumentationId"] == item.Id)
+<div>
+    <h5>Добавить поверку СИ</h5>
+    <form asp-action="CreateVerification" asp-controller="home">
+        <div>
+            <label asp-for="Date">Дата поверки</label><br />
+            <input type="date" asp-for="Date" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+            <span asp-validation-for="Date"></span>
+        </div>
+        <div>
+            <label asp-for="InstrumentationId">СИ</label><br />
+            <select name="InstrumentationId" id="InstrumentationId">
+                @foreach (var item in instrumentations)
                 {
-                    <option selected value="@item.Id">@item.Id. @item.Model @item.FactoryNumber</option>
+                    if (ViewData["InstrumentationId"] != null && (int)ViewData["InstrumentationId"] == item.Id)
+                    {
+                        <option selected value="@item.Id">@item.Id. @item.Model @item.FactoryNumber</option>
+                    }
+                    else
+                    {
+                        <option value="@item.Id">@item.Id. @item.Model</option>
+                    }
                 }
-                else
-                {
-                    <option value="@item.Id">@item.Id. @item.Model</option>
-                }
-            }
-        </select>
-        <span asp-validation-for="@VerificationService"></span>
-    </p>
-    <p>
-        <input type="submit" value="Добавить" />
-    </p>
-</form>
-
-<table class="table">
-    <tr><th>Id</th><th>Дата</th><th>СИ</th></tr>
-    @foreach (var item in verifications)
-    {
-        if (ViewData["InstrumentationId"] != null && (int)ViewData["InstrumentationId"] == item.InstrumentationId)
+            </select>
+            <span asp-validation-for="@VerificationService"></span>
+        </div>
+        <div>
+            <input type="submit" value="Добавить" />
+        </div>
+    </form>
+</div>
+<div>
+    <table class="table">
+        <tr><th>Id</th><th>Дата</th><th>СИ</th></tr>
+        @foreach (var item in verifications)
         {
-            <tr>
-                <td>@item.Id</td>
-                <td>@item.Date</td>
-                <td>@instrumentations.FirstOrDefault(u => u.Id == item.InstrumentationId).Id. @instrumentations.FirstOrDefault(u => u.Id == item.InstrumentationId).Model</td>
-                <td>
-                    <a asp-action="EditVerification" asp-controller="Home" asp-route-id="@item.Id">Изменить</a>
-                </td>
-            </tr>
+            if (ViewData["InstrumentationId"] != null && (int)ViewData["InstrumentationId"] == item.InstrumentationId)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Date</td>
+                    <td>@instrumentations.FirstOrDefault(u => u.Id == item.InstrumentationId).Id. @instrumentations.FirstOrDefault(u => u.Id == item.InstrumentationId).Model</td>
+                    <td>
+                        <a asp-action="EditVerification" asp-controller="Home" asp-route-id="@item.Id">Изменить</a>
+                    </td>
+                </tr>
+            }
         }
-    }
-</table>
+    </table>
+</div>

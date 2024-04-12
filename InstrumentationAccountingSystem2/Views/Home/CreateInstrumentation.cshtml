@@ -17,62 +17,64 @@
     }
 }
 
-<h5>Добавить СИ</h5>
-<form asp-action="CreateInstrumentation" asp-controller="home" style="display:flex; flex-wrap:wrap; justify-content:space-between;">
-    <p>
-        <label asp-for="TypeId">Тип СИ</label><br />
-        <select name="TypeId" id="TypeId">
-            <option value=""></option>
-            @foreach (var item in types)
-            {
-                <option value="@item.Id">@item.Id. @item.Name</option>
-            }
-        </select>
-        <span asp-validation-for="@TypeService"></span>
-    </p>
-    <p>
-        <label asp-for="Model">Модель</label><br />
-        <input type="text" asp-for="Model" />
-        <span asp-validation-for="Model"></span>
-    </p>
-    <p>
-        <label asp-for="FactoryNumber">Заводской номер</label><br />
-        <input type="text" asp-for="FactoryNumber" />
-        <span asp-validation-for="FactoryNumber"></span>
-    </p>
-    <p>
-        <label asp-for="LocationId">Место установки</label><br />
-        <select name="LocationId" id="LocationId">
-            <option value=""></option>
-            @foreach (var item in locations)
-            {
-                <option value="@item.Id">@item.Id. @item.Name</option>
-            }
-        </select>
-        <span asp-validation-for="@LocationService"></span>
-    </p>
-    <p>
-        <label asp-for="MeasurementLimits">Пределы измерений</label><br />
-        <input type="text" asp-for="MeasurementLimits" />
-        <span asp-validation-for="MeasurementLimits"></span>
-    </p>
-    <p>
-        <label asp-for="Frequency">Периодичность измерений</label><br />
-        <input type="text" asp-for="Frequency" value="12"/>
-        <span asp-validation-for="Frequency"></span>
-    </p>
-    <p>
-        <label asp-for="Connection">Присоединение к процессу</label><br />
-        <input type="text" asp-for="Connection" />
-        <span asp-validation-for="Connection"></span>
-    </p>
-    <p>
-        <label asp-for="Comment">Примечание</label><br />
-        <textarea type="text" asp-for="Comment" maxlength="250" rows="4" cols="70"></textarea>
-        <span asp-validation-for="Comment"></span>
-    </p>
-    <p style="flex-basis:100%">
-        <input type="submit" value="Добавить" />
-    </p>
-</form>
+<div style="font-size:large">Добавить СИ</div>
+<div>
+    <form asp-action="CreateInstrumentation" asp-controller="home" style="display:flex; flex-wrap:wrap; justify-content:space-between;">
+        <div>
+            <label asp-for="TypeId">Тип СИ</label><br />
+            <select name="TypeId" id="TypeId">
+                <option value=""></option>
+                @foreach (var item in types)
+                {
+                    <option value="@item.Id">@item.Id. @item.Name</option>
+                }
+            </select>
+            <span asp-validation-for="@TypeService"></span>
+        </div>
+        <div>
+            <label asp-for="Model">Модель</label><br />
+            <input type="text" asp-for="Model" />
+            <span asp-validation-for="Model"></span>
+        </div>
+        <div>
+            <label asp-for="FactoryNumber">Заводской номер</label><br />
+            <input type="text" asp-for="FactoryNumber" />
+            <span asp-validation-for="FactoryNumber"></span>
+        </div>
+        <div>
+            <label asp-for="LocationId">Место установки</label><br />
+            <select name="LocationId" id="LocationId">
+                <option value=""></option>
+                @foreach (var item in locations)
+                {
+                    <option value="@item.Id">@item.Id. @item.Name</option>
+                }
+            </select>
+            <span asp-validation-for="@LocationService"></span>
+        </div>
+        <div>
+            <label asp-for="MeasurementLimits">Пределы измерений</label><br />
+            <input type="text" asp-for="MeasurementLimits" />
+            <span asp-validation-for="MeasurementLimits"></span>
+        </div>
+        <div>
+            <label asp-for="Frequency">Периодичность измерений</label><br />
+            <input type="text" asp-for="Frequency" value="12" />
+            <span asp-validation-for="Frequency"></span>
+        </div>
+        <div>
+            <label asp-for="Connection">Присоединение к процессу</label><br />
+            <input type="text" asp-for="Connection" />
+            <span asp-validation-for="Connection"></span>
+        </div>
+        <div>
+            <label asp-for="Comment">Примечание</label><br />
+            <textarea type="text" asp-for="Comment" maxlength="250" rows="4" cols="40"></textarea>
+            <span asp-validation-for="Comment"></span>
+        </div>
+        <div>
+            <input type="submit" value="Добавить" />
+        </div>
+    </form>
+</div>
 
