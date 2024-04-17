@@ -37,7 +37,14 @@
                 <option value=""></option>
                 @foreach (var item in types)
                 {
-                    <option value="@item.Id">@item.Id. @item.Name</option>
+                    if (Model.TypeId == item.Id)
+                    {
+                        <option selected value="@item.Id">@item.Name</option>
+                    }
+                    else
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
                 }
             </select>
             <span asp-validation-for="@TypeService"></span>
@@ -55,9 +62,17 @@
         <div>
             <label asp-for="LocationId">Место установки</label><br />
             <select name="LocationId" id="LocationId">
+                <option value=""></option>
                 @foreach (var item in locations)
                 {
-                    <option value="@item.Id">@item.Id. @item.Name</option>
+                    if (Model.LocationId == item.Id)
+                    {
+                        <option selected value="@item.Id">@item.Id. @item.Name</option>
+                    }
+                    else
+                    {
+                        <option value="@item.Id">@item.Id. @item.Name</option>
+                    }
                 }
             </select>
             <span asp-validation-for="@LocationService"></span>

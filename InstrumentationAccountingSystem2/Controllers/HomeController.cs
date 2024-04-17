@@ -5,12 +5,14 @@ using InstrumentationAccountingSystem2.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Versioning;
 using System.Data;
 using System.Diagnostics;
 
 namespace InstrumentationAccountingSystem2.Controllers
 {
-    [Authorize(Roles = "Admin, Member")]
+    [AllowAnonymous]
+    //[Authorize(Roles = "Admin, Member")]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -376,7 +378,7 @@ namespace InstrumentationAccountingSystem2.Controllers
             if (ModelState.IsValid)
             {
                 _verificationService.Create(verificationCreateDto);
-                return RedirectToAction("CreateVerification");
+                return RedirectToAction("Index");
             }
             return View(verificationCreateDto);
         }
@@ -395,6 +397,27 @@ namespace InstrumentationAccountingSystem2.Controllers
                 _verificationService.EditVerification(verification);
                 //return RedirectToAction("EditInstrumentation", verification.InstrumentationId);
                 return RedirectToAction("Index");
+            }
+            else
+            {
+                //DateOnly d;
+                //foreach (var item in ModelState.Values)
+                //{
+                //    try
+                //    {
+                //        d = DateOnly.FromDateTime(Convert.ToDateTime(item.RawValue));
+                //        Verification ver = new Verification();
+                //        _verificationService.EditVerification(new Verification);
+
+                //    }
+                //    catch (Exception)
+                //    {
+
+                //        throw;
+                //    }
+                //}
+                //string s = 
+                //ModelState.Values.FirstOrDefault(u);
             }
             return View(verification);
         }

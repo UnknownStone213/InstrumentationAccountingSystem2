@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace InstrumentationAccountingSystem2.Controllers
 {
+    [AllowAnonymous]
     public class RolesController : Controller
     {
         private readonly RoleManager<IdentityRole> _roleManager;

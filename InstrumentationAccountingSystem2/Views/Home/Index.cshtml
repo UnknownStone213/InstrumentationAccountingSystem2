@@ -2,54 +2,31 @@
 
 @{
     // red and yellow colored rows using CSS class
-    Model.Verifications.OrderByDescending(u => u.Date);
-    Dictionary<int, bool> checkDates = new Dictionary<int, bool> { };
+    // finding last verifications of each instrumentation
+    List<Verification> lastVers = new List<Verification> { };
+    List<Verification> tempVers = new List<Verification> { };
     foreach (var item in Model.Instrumentations)
     {
-        try
+        foreach (var item2 in Model.Verifications)
         {
-            DateTime sp = DateTime.Parse(Model.Verifications.FirstOrDefault(u => u.InstrumentationId == item.Id)?.Date.AddMonths(item.Frequency ?? 0).ToString());
-            bool t = sp.Subtract(DateTime.Now.Date).Days <= 0;
-            if (t)
-                checkDates.Add(item.Id, true);
-            else
-                checkDates.Add(item.Id, false);
-        }
-        catch (Exception)
-        {
-            try
+            if (item.Id == item2.InstrumentationId)
             {
-                checkDates.Add(item.Id, true);
-            }
-            catch (Exception)
-            {
-                throw;
+                tempVers.Add(item2);
             }
         }
-    }
-    Dictionary<int, bool> check2Dates = new Dictionary<int, bool> { };
-    foreach (var item in Model.Instrumentations)
-    {
-        try
+        Verification? v = tempVers.FirstOrDefault();
+        foreach (var item2 in tempVers)
         {
-            DateTime sp = DateTime.Parse(Model.Verifications.FirstOrDefault(u => u.InstrumentationId == item.Id)?.Date.AddMonths(item.Frequency ?? 0).ToString());
-            bool t = sp.Subtract(DateTime.Now.Date).Days <= 30;
-            if (t)
-                check2Dates.Add(item.Id, true);
-            else
-                check2Dates.Add(item.Id, false);
-        }
-        catch (Exception)
-        {
-            try
+            if (v?.Date < item2.Date)
             {
-                check2Dates.Add(item.Id, true);
-            }
-            catch (Exception)
-            {
-                throw;
+                v = item2;
             }
         }
+        if (v != null)
+        {
+            lastVers.Add(v);
+        }
+        tempVers.Clear();
     }
 }
 
@@ -59,9 +36,9 @@
     <a class="btn btn-secondary" asp-action="CreateLocation">Добавить место установки</a>
     <a class="btn btn-secondary" asp-action="CreateVerification">Добавить поверку СИ</a>
 </div>
-<div class="d-flex">
-    <form method="get">
-        <div>
+<div>
+    <form method="get" class="row align-items-center">
+        <div class="col">
             <label>Тип СИ:</label>
             <select name="TypeId" id="TypeId">
                 <option value=""></option>
@@ -71,19 +48,19 @@
                 }
             </select>
         </div>
-        <div>
+        <div class="col">
             <label>Модель:</label>
             <input type="text" name="Model" maxlength="50" size="20" value="@ViewData["Model"]" />
         </div>
-        <div>
+        <div class="col">
             <label>Заводской номер:</label>
             <input type="text" name="FactoryNumber" maxlength="50" size="10" value="@ViewData["FactoryNumber"]" />
         </div>
-        <div>
+        <div class="col">
             <label>Место установки:</label>
             <input type="text" name="LocationName" maxlength="50" size="20" value="@ViewData["LocationName"]" />
         </div>
-        <div>
+        <div class="col">
             <label>30 дней:</label>
             <input type="checkbox" name="checkMonth" value="checkMonthTrue" checked="@ViewData["checkMonth"]" />
         </div>
@@ -107,7 +84,7 @@
     <h4>Средства измерений(@Model.Instrumentations.Count):</h4>
 </div>
 <div class="table-responsive">
-    <table class="table table-hover">
+    <table class="table table-hover" style="font-size:12px">
         <tr>
             <th onclick="location.href = '@Url.Action("Index", "Home", new { sortName = "Id" })';">Id</th>
             <th onclick="location.href = '@Url.Action("Index", "Home", new { sortName = "Тип" })';">Тип</th>
@@ -123,31 +100,46 @@
         </tr>
         @foreach (var item in Model.Instrumentations)
         {
-            <tr class="@string.Concat("check", checkDates[item.Id].ToString()) @string.Concat("check2", check2Dates[item.Id].ToString())" onclick="location.href = '@Url.Action("EditInstrumentation", "Home", item)';" style="word-wrap:normal">
-                <td>@item.Id</td>
-                <td>@Model.Types.FirstOrDefault(u => u.Id == item.TypeId)?.Id @Model.Types.FirstOrDefault(u => u.Id == item.TypeId)?.Name</td>
-                <td>@item.Model</td>
-                <td>@item.FactoryNumber</td>
-                <td>@Model.Locations.FirstOrDefault(u => u.Id == item.LocationId)?.Name</td>
-                <td>@item.MeasurementLimits</td>
-                <td>@Model.Verifications.FirstOrDefault(u => u.InstrumentationId == item.Id)?.Date</td>
-                <td>@item.Frequency</td>
-                <td>
-                    @Model.Verifications.FirstOrDefault(u => u.InstrumentationId == item.Id)?.Date.AddMonths(item.Frequency ?? 0)
-                    @if (@Model.Verifications.FirstOrDefault(u => u.InstrumentationId == item.Id) == null)
-                    {
-                        <p></p>
-                    }
-                    else
-                    {
-                        Model.Verifications.OrderByDescending(u => u.Date);
-                        DateTime sp = DateTime.Parse(Model.Verifications.FirstOrDefault(u => u.InstrumentationId == item.Id)?.Date.AddMonths(item.Frequency ?? 0).ToString());
+            if (lastVers.FirstOrDefault(u => u.InstrumentationId == item.Id) == null)
+            {
+                <tr class="@string.Concat("check", "True")" onclick="location.href = '@Url.Action("EditInstrumentation", "Home", item)';" style="word-wrap:normal">
+                    <td>@item.Id</td>
+                    <td>@Model.Types.FirstOrDefault(u => u.Id == item.TypeId)?.Name</td>
+                    <td>@item.Model</td>
+                    <td>@item.FactoryNumber</td>
+                    <td>@Model.Locations.FirstOrDefault(u => u.Id == item.LocationId)?.Name</td>
+                    <td>@item.MeasurementLimits</td>
+                    <td>@lastVers.FirstOrDefault(u => u.InstrumentationId == item.Id)?.Date</td>
+                    <td>@item.Frequency</td>
+                    <td> </td>
+                    <td>@item.Connection</td>
+                    <td>@item.Comment</td>
+                </tr>
+            }
+            else
+            {
+                <tr class="@string.Concat("check", DateTime.Parse(lastVers.FirstOrDefault(u => u.InstrumentationId == item.Id)?.Date.AddMonths(item.Frequency ?? 0).ToString()).Subtract(DateTime.Now.Date).Days <= 0)
+                @string.Concat("check2", DateTime.Parse(lastVers.FirstOrDefault(u => u.InstrumentationId == item.Id)?.Date.AddMonths(item.Frequency ?? 0).ToString()).Subtract(DateTime.Now.Date).Days <= 30)"
+                    onclick="location.href = '@Url.Action("EditInstrumentation", "Home", item)';" style="word-wrap:normal">
+                    <td>@item.Id</td>
+                    <td>@Model.Types.FirstOrDefault(u => u.Id == item.TypeId)?.Name</td>
+                    <td>@item.Model</td>
+                    <td>@item.FactoryNumber</td>
+                    <td>@Model.Locations.FirstOrDefault(u => u.Id == item.LocationId)?.Name</td>
+                    <td>@item.MeasurementLimits</td>
+                    <td>@lastVers.FirstOrDefault(u => u.InstrumentationId == item.Id)?.Date</td>
+                    <td>@item.Frequency</td>
+                    <td>
+                        @lastVers.FirstOrDefault(u => u.InstrumentationId == item.Id)?.Date.AddMonths(item.Frequency ?? 0)
+                        @{
+                            DateTime sp = DateTime.Parse(lastVers.FirstOrDefault(u => u.InstrumentationId == item.Id)?.Date.AddMonths(item.Frequency ?? 0).ToString());
+                        }
                         <p>(@sp.Subtract(DateTime.Now.Date).Days дней)</p>
-                    }
-                </td>
-                <td>@item.Connection</td>
-                <td>@item.Comment</td>
-            </tr>
+                    </td>
+                    <td>@item.Connection</td>
+                    <td>@item.Comment</td>
+                </tr>
+            }
         }
     </table>
 </div>
@@ -164,5 +156,9 @@
     .tableHead {
         background: none;
         border: none;
+    }
+
+    td{
+        line-height:1;
     }
 </style>
