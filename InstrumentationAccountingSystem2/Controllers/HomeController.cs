@@ -216,6 +216,25 @@ namespace InstrumentationAccountingSystem2.Controllers
                     }
                     else
                     {
+                        //List<Verification> lastVers = new List<Verification>() { };
+                        //foreach (var item in _instrumentationService.GetAll())
+                        //{
+                        //    lastVers.Add(_verificationService.GetLastVerificationByInstrumentationId(item.Id));
+                        //}
+                        //lastVers.OrderByDescending(u => u.Date);
+                        //List<int> sortIds = new List<int>() { };
+                        //foreach (var item in lastVers)
+                        //{
+                        //    sortIds.Add(item.Id);
+                        //}
+                        //List<Instrumentation> instrumentations2 = new List<Instrumentation>();
+                        //foreach (var item in sortIds)
+                        //{
+                        //    instrumentations2.Add(instrumentations.First(o => item == o.Id));
+                        //}
+                        //instrumentations = instrumentations2;
+
+
                         Dictionary<int, DateTime> lastVerifications = new Dictionary<int, DateTime>();
                         foreach (var item2 in instrumentations)
                         {
@@ -268,14 +287,14 @@ namespace InstrumentationAccountingSystem2.Controllers
                     }
                     else
                     {
-                        Dictionary<int, DateTime> lastVerifications = new Dictionary<int, DateTime>();
+                        Dictionary<int, DateTime> nextVerifications = new Dictionary<int, DateTime>();
                         foreach (var item2 in instrumentations)
                         {
-                            lastVerifications.Add(item2.Id, _verificationService.GetLastVerificationByInstrumentationId(item2.Id)?.Date.ToDateTime(TimeOnly.MinValue) ?? DateTime.MinValue);
+                            nextVerifications.Add(item2.Id, _verificationService.GetLastVerificationByInstrumentationId(item2.Id)?.Date.ToDateTime(TimeOnly.MinValue).AddMonths(item2.Frequency ?? 0) ?? DateTime.MinValue);
                         }
-                        lastVerifications = lastVerifications.OrderByDescending(u => u.Value).ToDictionary();
+                        nextVerifications = nextVerifications.OrderByDescending(u => u.Value).ToDictionary();
                         List<int> sortIds = new List<int>();
-                        foreach (var item2 in lastVerifications)
+                        foreach (var item2 in nextVerifications)
                         {
                             sortIds.Add(item2.Key);
                         }

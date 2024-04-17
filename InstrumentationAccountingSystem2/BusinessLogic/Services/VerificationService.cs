@@ -55,9 +55,24 @@ namespace InstrumentationAccountingSystem2.BusinessLogic.Services
         public Verification? GetLastVerificationByInstrumentationId(int id)
         {
             var verifications = _applicationContext.Verifications.ToList();
-            verifications = verifications.OrderByDescending(u => u.Date).ToList();
+            List<Verification> l = new List<Verification>() { };
+            foreach (var v in verifications) 
+            {
+                if (v.InstrumentationId == id)
+                {
+                    l.Add(v);
+                }
+            }
+            Verification? lastVer = l.FirstOrDefault();
+            foreach (var i in l) 
+            {
+                if (lastVer.Date < i.Date)
+                {
+                    lastVer = i;
+                }
+            }
 
-            return verifications.FirstOrDefault(u => u.InstrumentationId == id);
+            return lastVer;
         }
     }
 }
